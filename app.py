@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 import json
 import pandas as ad
-import datetime
+import datetime as datetime
 
 # scrape the raw data from the url
 def scrape_data(url):
@@ -52,7 +52,7 @@ def get_fields():
         fields.append(input(f"please enter field {field_n} that you would like to analyze: "))
         
         field_n += 1
-        
+
         #check to see if the use is done with inputting fields
         user_done = input("if you are done inputting fields please type exit or just click enter to contiue: ")
         if user_done.lower() == 'exit':
@@ -72,6 +72,18 @@ if __name__  == "__main__":
     fields = get_fields()
 
     try:
-        data = scrape_data(url)    # scrape the url for the raw data 
+        #generate time stamp to save the data
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')     # year, month _ hour, mintute second
+
+
+        raw_data = scrape_data(url)    # scrape the url for the raw data 
+
+        #save the data from the scape
+        #save_data(raw_data, timestamp)
+
+        #fomat the data usinf OpenAI
+        #format_data()       ## GOTTA FINISH THIS
+
+        # THEN SAVE THE DATA, DONT HAVE THIS YET
 
 
