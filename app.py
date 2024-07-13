@@ -38,13 +38,40 @@ def format_data(data, fields = none):
     #integrate OpenAI client
     client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
-if __name__  == "__name__":
+
+def save_data_formatted():
+    print("save the data from the OpenAI analysis")
+
+# get the data fields that need to be analyzed 
+def get_fields():
+    fields = []
+    done = False
+    field_n = 1
+
+    while not done:
+        fields.append(input(f"please enter field {field_n} that you would like to analyze: "))
+        
+        field_n += 1
+        
+        #check to see if the use is done with inputting fields
+        user_done = input("if you are done inputting fields please type exit or just click enter to contiue: ")
+        if user_done.lower() == 'exit':
+            done = True
+        
+
+
+    print(f"there are your fields: {fields}")
+           
+
+if __name__  == "__main__":
 
     #get the url from the user to scrape
     url = input("What url would you like to scrape")
 
     #get the fields that you would like to extract from the urls
-    
+    fields = get_fields()
 
     try:
-        data = scrape_data(url)
+        data = scrape_data(url)    # scrape the url for the raw data 
+
+
