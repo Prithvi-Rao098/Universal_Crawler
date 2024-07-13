@@ -6,7 +6,7 @@ import json
 import pandas as ad
 import datetime
 
-
+# scrape the raw data from the url
 def scrape_data(url):
     load_dotenv()
 
@@ -29,4 +29,22 @@ def save_data(raw_data, timestamp, output_folder = 'outputs'):
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(raw_data)
 
-    print(f"the data from the website is saved to {output_path}")           
+    print(f"the data from the website is saved to {output_path}") 
+
+# format the data and use the GPT AI to analyze
+def format_data(data, fields = none):
+    load_dotenv
+
+    #integrate OpenAI client
+    client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+
+if __name__  == "__name__":
+
+    #get the url from the user to scrape
+    url = input("What url would you like to scrape")
+
+    #get the fields that you would like to extract from the urls
+    
+
+    try:
+        data = scrape_data(url)
