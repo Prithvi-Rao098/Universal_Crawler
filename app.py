@@ -3,7 +3,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 import json
-import pandas as ad
+import pandas as pd
 from datetime import datetime
 
 # scrape the raw data from the url
@@ -23,11 +23,11 @@ def scrape_data(url):
         raise KeyError("the url does not have scraped down data that can be marked down")
 
 # saving the data
-def save_data(raw_data, timestamp, output_folder = 'outputs'):
+def save_data(data, timestamp, output_folder = 'outputs/raw data'):
     output_path = os.path.join(output_folder, f'raw_Data_{timestamp}.md')
 
     with open(output_path, 'w', encoding='utf-8') as f:
-        f.write(raw_data)
+        f.write(data)
 
     print(f"the data from the website is saved to {output_path}") 
 
@@ -70,8 +70,52 @@ def format_data(data, fields):
         ]
     )
 
-#def save_data_formatted():
-    p#rint("save the data from the OpenAI analysis")    
+    #check if the resonse has the expected data
+    if response and response.choices:
+        formatted_data = response.choices[0].message.content.strip()
+        print(f"This the formatted data recieved from the API: {formatted_data} \n")
+
+        try:
+            generated_json = json.loads(formatted_data)
+
+        except json.loads(formatted_data):
+            print(f"JSON deconding error {e} \n the formated data that caused the error: {format_data} \n")
+            raise ValueError("The formatted data could not be decoded into JSON format")
+        
+        return generated_json
+
+    else:
+        raise ValueError("The OpenAI response did not generate relevant data")
+    
+
+# saving the formatted data from the Open AI responsex
+def save_data_formatted(data, timestamp, output_folder = 'outputs/formatted data'):
+    # make sure path exists
+    os.makedirs(output_folder, exist_ok=True)
+
+    #define output path
+    output_path = os.path.join(output_folder, f'formatted_Data_{timestamp}.md')
+
+    with open(output_path, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent = 4)
+    print(f"JSON data saved to {output_path}")
+
+    # save as an Excel sheet
+    if isinstance(data, dict) and len(data) == 1:
+        key = next(iter(data))
+        data = data[key]
+
+    # Conveter the formatted data into a Pandas DataFrame
+    df = pd.DataFrame(data)
+
+    if isinstance(data, dict):
+        data = [data]
+
+    excel_output_path = os.path.join('outputs/Excel Outputs', f'formatted_Data_{timestamp}.md')
+    df.to_excel(excel_output_path, index = False)
+    print(f"Formatted Data saved to Excel at {excel_output_path}")
+
+
 
 # get the data fields that need to be analyzed 
 def get_fields():
@@ -114,10 +158,11 @@ if __name__  == "__main__":
         save_data(raw_data, timestamp)
 
         #fomat the data usinf OpenAI
-        #format_data()       ## GOTTA FINISH THIS
+        format_data(raw_data, fields)       ## GOTTA FINISH THIS
 
         # THEN SAVE THE DATA, DONT HAVE THIS YET
-    
+        save_data_formatted()
+
     except Exception as e:
         print(f"there is an error: {e}")
 
