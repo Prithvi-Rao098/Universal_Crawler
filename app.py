@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 import json
 import pandas as ad
-import datetime as datetime
+from datetime import datetime
 
 # scrape the raw data from the url
 def scrape_data(url):
@@ -32,15 +32,15 @@ def save_data(raw_data, timestamp, output_folder = 'outputs'):
     print(f"the data from the website is saved to {output_path}") 
 
 # format the data and use the GPT AI to analyze
-def format_data(data, fields = none):
-    load_dotenv
+#ef format_data(data, fields = none):
+    #load_dotenv
 
     #integrate OpenAI client
-    client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+    #client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 
-def save_data_formatted():
-    print("save the data from the OpenAI analysis")
+#def save_data_formatted():
+    p#rint("save the data from the OpenAI analysis")
 
 # get the data fields that need to be analyzed 
 def get_fields():
@@ -79,11 +79,14 @@ if __name__  == "__main__":
         raw_data = scrape_data(url)    # scrape the url for the raw data 
 
         #save the data from the scape
-        #save_data(raw_data, timestamp)
+        save_data(raw_data, timestamp)
 
         #fomat the data usinf OpenAI
         #format_data()       ## GOTTA FINISH THIS
 
         # THEN SAVE THE DATA, DONT HAVE THIS YET
+    
+    except Exception as e:
+        print(f"there is an error: {e}")
 
 
