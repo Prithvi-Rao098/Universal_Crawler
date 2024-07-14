@@ -32,15 +32,46 @@ def save_data(raw_data, timestamp, output_folder = 'outputs'):
     print(f"the data from the website is saved to {output_path}") 
 
 # format the data and use the GPT AI to analyze
-#ef format_data(data, fields = none):
-    #load_dotenv
+def format_data(data, fields):
+    load_dotenv
 
     #integrate OpenAI client
-    #client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+    client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
+    # set the fields
+    if fields == None:
+        format_data(data, get_fields())
+
+    # define the system message: this will give the chat bot spefic commands to be able to get the correct inforamtion
+    system_message = f"Your task is to convert structured information from the given text and convert it into a pure JSON format. The JSON file should only contain
+                       stuctured data extracted from the text, with no additional commentary, explainations, or extraneous informatin.
+                       You could encounter cases where you cant find the data of the fields provided or the data will be in a different language. In the case 
+                       of no relevent data, just output a JSON with no information. In the case of the differnt langauage, please proccess the text and provide an 
+                       output in pure JSON format with no words before or after the JSON."
+    
+    # define the statement to extract the correct information
+    inquiry_message = f"Extract the following information from the provided text: \n this is the provided content: {data} \n \n This is the information you need to extract: {fields}" 
+
+    #CREATE THE CHAT RESPONSE
+    response = client.chat.completions.create(
+        model = "gpt-3.5-turbo-1106"
+        response_format={"type": "json_obect"},
+        messages=[
+            # define the role of OpenAI
+            {
+                "role": "system",
+                "content": system_message
+            },
+            # define the inquiry
+            {
+                "role": "user",
+                "content": inquiry_message
+            }
+        ]
+    )
 
 #def save_data_formatted():
-    p#rint("save the data from the OpenAI analysis")
+    p#rint("save the data from the OpenAI analysis")    
 
 # get the data fields that need to be analyzed 
 def get_fields():
@@ -73,12 +104,13 @@ if __name__  == "__main__":
 
     try:
         #generate time stamp to save the data
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')     # year, month _ hour, mintute second
+        timestamp = datetime.now().strftime('%Y%:m:%d_%H:%M:%S')     # year, month _ hour, mintute second
 
 
         raw_data = scrape_data(url)    # scrape the url for the raw data 
 
         #save the data from the scape
+
         save_data(raw_data, timestamp)
 
         #fomat the data usinf OpenAI
