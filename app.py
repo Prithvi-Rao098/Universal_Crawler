@@ -43,21 +43,21 @@ def format_data(data, fields):
         format_data(data, get_fields())
 
     # define the system message: this will give the chat bot spefic commands to be able to get the correct inforamtion
-    system_message = f"Your task is to convert structured information from the given text and convert it into a pure JSON format. The JSON file should only contain
+    system_message = f"""Your task is to convert structured information from the given text and convert it into a pure JSON format. The JSON file should only contain
                        stuctured data extracted from the text, with no additional commentary, explainations, or extraneous informatin.
                        You could encounter cases where you cant find the data of the fields provided or the data will be in a different language. In the case 
                        of no relevent data, just output a JSON with no information. In the case of the differnt langauage, please proccess the text and provide an 
-                       output in pure JSON format with no words before or after the JSON."
+                       output in pure JSON format with no words before or after the JSON."""
     
     # define the statement to extract the correct information
     inquiry_message = f"Extract the following information from the provided text: \n this is the provided content: {data} \n \n This is the information you need to extract: {fields}" 
 
     #CREATE THE CHAT RESPONSE
-    response = client.chat.completions.create(
-        model = "gpt-3.5-turbo-1106"
+    response = client.chat.completions.create(        
+        model = "gpt-3.5-turbo-1106",
         response_format={"type": "json_obect"},
         messages=[
-            # define the role of OpenAI
+            # define the role of OpenAIå
             {
                 "role": "system",
                 "content": system_message
