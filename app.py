@@ -39,8 +39,8 @@ def format_data(data, fields):
     client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
     # set the fields
-    if fields == None:
-        format_data(data, get_fields())
+    #if fields == None:
+        #format_data(data, get_fields())
 
     # define the system message: this will give the chat bot spefic commands to be able to get the correct inforamtion
     system_message = f"""Your task is to convert structured information from the given text and convert it into a pure JSON format. The JSON file should only contain
@@ -157,11 +157,8 @@ if __name__  == "__main__":
 
         save_data(raw_data, timestamp)
 
-        #fomat the data usinf OpenAI
-        format_data(raw_data, fields)       ## GOTTA FINISH THIS
-
         # THEN SAVE THE DATA, DONT HAVE THIS YET
-        save_data_formatted()
+        save_data_formatted(format_data(raw_data, fields), )
 
     except Exception as e:
         print(f"there is an error: {e}")
